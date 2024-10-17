@@ -38,6 +38,7 @@ function crearUsuariModel($dni, $nom, $email,$contrasenya) {
 }
 
 
+
 function iniciarSessioModel($email, $contrasenya) {
 
     global $conexio;
@@ -56,10 +57,11 @@ function iniciarSessioModel($email, $contrasenya) {
             $stmt2->bindParam(":email", $email);
             $stmt2->execute();
             $contrasenyaBD = $stmt2->fetch(PDO::FETCH_ASSOC);
-
+            
 
             if ($contrasenyaBD && password_verify($contrasenya, $contrasenyaBD['contrasenya'])) {
-                echo "Hola";
+                session_start();
+                $_SESSION['nom'];
             } else {
                 echo "Adios";
             }
