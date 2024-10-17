@@ -12,7 +12,7 @@ function mostrarArticlesPersonals(){
         $articlesPerPagina = (int)$_GET["articlesPerPagina"]; // En cas de que tingui un valor l'agafa
         setcookie('articlesPerPagina', $articlesPerPagina, time() + (86400 * 30), "/");
     } else {
-        $articlesPerPagina = $_COOKIE['articlesPerPagina']; // Per defecte, al carregar la pàgina ens posarà 5 articles
+        $articlesPerPagina = $_COOKIE['articlesPerPagina']; // T'agafarà l'ultim valor que vas modificar i es va guardar a les cookies
     }
     
     if ($articlesPerPagina <= 0) { // Si el numero és inferior a 1, mostrarà missatge d'error ja que no es poden mostrar 0 articles
