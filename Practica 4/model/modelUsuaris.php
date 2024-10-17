@@ -1,6 +1,8 @@
 <?php
 
+
 require "../conexio.php";
+
 
 function crearUsuariModel($dni, $nom, $email,$contrasenya) {
 
@@ -52,18 +54,22 @@ function iniciarSessioModel($email, $contrasenya) {
 
         if ($stmt->rowCount() > 0) { // En cas de que es trobi algun camp i retorni la columna, llença un missatge de que ja existeix
             
-            $sqlContrasenya = "SELECT contrasenya FROM usuaris WHERE email = :email";
+            $sqlContrasenya = "SELECT * FROM usuaris WHERE email = :email";
             $stmt2 = $conexio->prepare($sqlContrasenya);
             $stmt2->bindParam(":email", $email);
             $stmt2->execute();
-            $contrasenyaBD = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $usuariBD = $stmt2->fetch(PDO::FETCH_ASSOC);
             
 
-            if ($contrasenyaBD && password_verify($contrasenya, $contrasenyaBD['contrasenya'])) {
+            if ($usuariBD && password_verify($contrasenya, $usuariBD['contrasenya'])) {
                 session_start();
-                $_SESSION['nom'];
+                $_SESSION['email'] = $usuariBD['email'] ;
+                $_SESSION['nom'] = $usuariBD['nom'];
+                $_SESSION['idUsuari'] = $usuariBD['id'];
+                header("Location: ./vistaUsuari.php");
+                exit();
             } else {
-                echo "Adios";
+                echo "Mail o contrasenya incorrectes";
             }
 
 
@@ -74,6 +80,52 @@ function iniciarSessioModel($email, $contrasenya) {
 
     } catch (Exception $e){
 
+    }
+
+}
+
+function obtenirArticlesTotalsPersonal() { // Obtenim TOTS els articles de la BDD
+
+    global $conexio; // Variable global que conté la conexió
+    $idUsuari = $_SESSION["idUsuari"];
+    
+    try {
+
+        $sqlArticlesTotals = "SELECT COUNT(*) AS total FROM articles WHERE id_usuari = :idUsuari"; // Sentencia sql per obtenir tots els articles que hi hagi a la BDD
+        $stmt = $conexio->prepare($sqlArticlesTotals);
+        $stmt->bindParam(":idUsuari", $idUsuari);
+        $stmt->execute(); // Executa la sentencia sql
+        $articlesTotals = $stmt->fetch(PDO::FETCH_ASSOC)['total']; // Guarda la quantitat de articles que hi ha a la BDD
+        return $articlesTotals;
+
+    } catch (Exception $e) {
+        // En cas d'error a la BD, mostra el missatge d'error per pantalla
+        echo "No n'hi han articles am l'id '$idUsuari";
+    }
+}
+
+function obtenirArticlesPaginaPersonal($iniciArticles, $articlesPerPagina) { // Obté els articles que s'han de mostrar a cada pàgina
+
+    global $conexio; // Variable global que conté la conexió
+    $idUsuari = $_SESSION["idUsuari"];
+    
+    try {
+
+        $sql = "SELECT * FROM articles WHERE id_usuari = :idUsuari LIMIT :inici, :articlesPerPagina"; // Sentencia sql que delimitarà els articles que es mostraran per pantalla
+        $stmt = $conexio->prepare($sql);
+        $stmt->bindParam(":inici", $iniciArticles, PDO::PARAM_INT); // Assignem el valor a :inici
+        $stmt->bindParam(":articlesPerPagina", $articlesPerPagina, PDO::PARAM_INT); // Assignem el valor a :articlesPerPagina
+        $stmt->bindParam(":idUsuari", $idUsuari, PDO::PARAM_INT);
+        $stmt->execute(); // Executem la sentència
+
+        $articles = $stmt->fetchAll(PDO::FETCH_ASSOC); // Retorna en fomra d'array els articles que s'han de mostrar i no la quantitat
+
+        return $articles; // Retornem la variable amb els articles
+
+    } catch (Exception $e) {
+
+         // En cas d'error a la BD, mostra el missatge d'error per pantalla
+         echo "Error al obtenir les dades: " . $e->getMessage();
     }
 
 }

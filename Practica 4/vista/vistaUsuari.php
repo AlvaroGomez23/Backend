@@ -1,8 +1,10 @@
 <!-- ALVARO GOMEZ -->
-<?php 
+
+<?php
 session_start();
-if (isset($_SESSION['nom'])) {
-    header("Location: ./vistaUsuari.php");
+if (!isset($_SESSION["email"])) {
+    header("Location: ./vistaLogin.php");
+    exit();
 }
 ?>
 
@@ -19,42 +21,46 @@ if (isset($_SESSION['nom'])) {
 <body>
 
 <header>
-    <div class="logo">Articles</div>
-    <nav>
-    </nav>
+    <div class="logo">Hola! <?php echo $_SESSION['nom']  ?></div>
     <div class="signin-form">
-        <form action="../vista/vistaSignin.php">
-            <input type="submit" value="Sign In">
+        <form action="../vista/vistaInserir.php">
+            <input type="submit" value="Inserir Article">
         </form>
     </div>
-    <div class="login-form">
-        <form action="../vista/vistaLogin.php">
-            <input type="submit" value="Log In">
+    <div class="signin-form">
+        <form action="./vistaPerfil.php">
+            <input type="submit" value="Perfil">
         </form>
-    </div>
+        <p></p>
+        <form action="../controlador/logout.php" method="post">
+            <input type="submit" value="Log Out">
+        </form>
 </header>
 
 <h1>Articles</h1>
 
 <form method="get">
-    <label for="qtArticles" class="labelArticles">Quantitat Articles (Per Pàgina):</label> <!-- Etiqueta per informar -->
-    <input type="number" id="articlesPerPagina" name="articlesPerPagina" class="inputArticles" value="<?php echo $_GET['articlesPerPagina'] ?? 1 ?>"> <!-- Input per posar el numero d'articles-->
+    <label for="qtArticles" class="labelArticles">Quantitat Articles (Per Pàgina):</label>
+    <input type="number" id="articlesPerPagina" name="articlesPerPagina" class="inputArticles" value="<?php echo isset($_COOKIE['articlesPerPagina']) ? $_COOKIE['articlesPerPagina'] : 1; ?>"> <!-- Input per posar el numero d'articles -->
     <input type="submit" value="Modificar" class="inputArticles"> <!-- Botó per modificar la qt de articles -->
 </form>
 
 <?php
 
-require "../controlador/controladorGeneral.php";
+require "../controlador/controladorArticlesPersonals.php";
 
-mostrarTotsArticles();
+mostrarArticlesPersonals();
 
-function vistaMostrarArticles($articlesTotals, $articlesPerPagina, $articles, $paginaActual) { // Paràmetres necessaris per fer els càlculs i mostrar els articles
+function vistaMostrarArticlesPersonals($articlesTotals, $articlesPerPagina, $articles, $paginaActual) { // Paràmetres necessaris per fer els càlculs i mostrar els articles
     if ($articles) {
         for ($i = 0; $i < count($articles); $i++) { // Bucle for per imprimir els diferents articles que pugin haver-hi a la pagina
             echo '<div class="articles">'; // "<div>" per els articles
             echo '<h2>' . htmlspecialchars($articles[$i]["nom"]) . '</h2>'; // Agafa el titol dels articles i els printa
             echo '<p>' . htmlspecialchars($articles[$i]["descripcio"]) . '</p>'; //  Agafa la descripcio dels articles i els printa
+            echo '<p><br></p>';
+            echo '<a href=vistaModificar.php>✏️</a>'.'<a href=vistaEliminar.php>🗑️</a>';
             echo '</div>';
+            
         }
     }
 
@@ -89,6 +95,7 @@ function vistaMostrarArticles($articlesTotals, $articlesPerPagina, $articles, $p
 
     
 }
+
 ?>
 <p></p>
 <form action="index.php">

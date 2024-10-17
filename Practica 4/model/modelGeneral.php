@@ -4,8 +4,9 @@ require "../conexio.php";
 
 
 function inserirArticleModel ($nom, $descripcio) { // Funció per insertar els articles
-    
+    session_start();
     global $conexio; // Variable global que conté la conexió
+    $idUsuari = $_SESSION['idUsuari'];
 
     try  { // FASE 1: Buscar que existeixi l'article
 
@@ -18,9 +19,9 @@ function inserirArticleModel ($nom, $descripcio) { // Funció per insertar els a
 
     } else { // Altrament l'article no existeix
         // FASE 2: Insertar l'article si no existeix
-        $sqlInsert = "INSERT INTO articles (nom, descripcio) VALUES (:nom, :descripcio)"; // Sql per insertar l'article a la BDD
+        $sqlInsert = "INSERT INTO articles (nom, descripcio, id_usuari) VALUES (:nom, :descripcio, :id_usuari)"; // Sql per insertar l'article a la BDD
         $stmtInsert = $conexio->prepare($sqlInsert);
-        $stmtInsert->execute([":nom"=>$nom, ":descripcio"=>$descripcio]); // Reemplaçem els valors temporals pels introduits de l'usuari
+        $stmtInsert->execute([":nom"=>$nom, ":descripcio"=>$descripcio, ":id_usuari"=>$idUsuari]); // Reemplaçem els valors temporals pels introduits de l'usuari
 
         echo "L'article amb el nom '$nom' s'ha afegit correctament.<br>"; // Missatge de confirmació
     }
