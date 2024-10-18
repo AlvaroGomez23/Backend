@@ -1,8 +1,5 @@
 
 <!-- ALVARO GOMEZ -->
- <?php
-    require "../controlador/session.php";
- ?>
 <?php
 session_start();
 if (!isset($_SESSION["email"])) {

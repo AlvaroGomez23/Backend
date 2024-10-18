@@ -131,5 +131,55 @@ function obtenirArticlesPaginaPersonal($iniciArticles, $articlesPerPagina) { // 
 }
 
 
+function comprovarPswActual($pswActual) {
+    session_start();
+    global $conexio;
+    $id_usuari = $_SESSION['idUsuari'];
+
+    try {
+
+        $sql = "SELECT * FROM usuaris WHERE id = :id_usuari";
+        $stmt = $conexio->prepare($sql);
+        $stmt->bindParam(":id_usuari",$id_usuari);
+        $stmt->execute();
+        $usuari = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($stmt->rowCount() > 0) { 
+
+            if ($usuari && password_verify($pswActual, $usuari['contrasenya'])) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+    } catch (Exception $e) {
+
+    }
+
+
+}
+
+function cambiarPswModel($pswNew) {
+    
+    global $conexio;
+    $id_usuari = $_SESSION['idUsuari'];
+    $pswEncriptada = password_hash($pswNew, PASSWORD_BCRYPT);
+
+    try {
+        $sql = "UPDATE usuaris SET contrasenya = :newPsw WHERE id = :id_usuari";
+        $stmt = $conexio->prepare($sql);
+        $stmt->bindParam(":newPsw", $pswEncriptada);
+        $stmt->bindParam(":id_usuari", $id_usuari);
+        $stmt->execute();
+
+    } catch (Exception $e) {
+        echo "Hi ha hagut un error al cambiar la contrasenya";
+    }
+
+
+}
+
 
 ?>

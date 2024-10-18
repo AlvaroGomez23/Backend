@@ -177,4 +177,27 @@ function obtenirArticlesPagina($iniciArticles, $articlesPerPagina) { // Obté el
 
 }
 
+function comprovarUsuariModel($idUsuari, $nom) {
+
+    global $conexio;
+
+    try {
+        
+        $sql = "SELECT * FROM articles WHERE nom = :nom";
+        $stmt = $conexio->prepare($sql);
+        $stmt->bindParam(":nom", $nom);
+        $stmt->execute();
+        $articleUser = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($articleUser && $articleUser['id_usuari'] == $idUsuari) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } catch (Exception $e) {
+
+    }
+
+}
+
 ?>

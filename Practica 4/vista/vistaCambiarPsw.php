@@ -11,17 +11,16 @@
     <div class="login-container">
         <h2>Cambiar Contrasenya</h2>
         <form action="#" method="POST">
-            <input type="password" name="actualPsw" class="input-field" placeholder="Contrasenya Actual" required>
-            <input type="password" name="newPsw" class="input-field" placeholder="Nova Contrasenya" required>
-            <input type="password" name="newPswVerificar" class="input-field" placeholder="Repeteix la nova contrasenya" required>
-            <input type="submit" value="cambiar Contrasenya" class="login-btn">
+            <input type="password" name="pswActual" class="input-field" placeholder="Contrasenya Actual" required>
+            <input type="password" name="pswNew" class="input-field" placeholder="Nova Contrasenya" required>
+            <input type="password" name="pswVerify" class="input-field" placeholder="Repeteix la nova contrasenya" required>
+            <input type="submit" name="cambiar" value="Cambiar Contrasenya" class="login-btn">
             <?php
 
-                /*require "../controlador/controladorLogIn.php";
-                if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-                    iniciarSessio();
-                }*/
+                require "../controlador/controladorCambiarPsw.php";
+                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["cambiar"])) {
+                    cambiarPsw();
+                }
 
             ?>
         </form>

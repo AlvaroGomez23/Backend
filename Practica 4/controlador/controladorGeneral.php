@@ -1,5 +1,6 @@
 <?php
 // ALVARO GOMEZ
+
 require "../conexio.php"; // Fitxer de la conexió
 
 function inserirArticle() { // Inserir l'article a la BDD
@@ -19,17 +20,22 @@ function inserirArticle() { // Inserir l'article a la BDD
 
 function modificarArticle() { // Modificar l'article de la BDD
 
-    
+    session_start();
     $nom = $_POST["nom"]; // Agafar el nom actual del article
     $newNom = $_POST["newNom"]; // Agafar el nom que es vol cambiar 
     $descripcio = $_POST["descripcio"]; // Descripció per modificar
     $newNom = trim($newNom);
+    $idUsuari = $_SESSION['idUsuari'];
 
-    if (empty($newNom)) { // Si el nom nou es vol modificar a un espai o buit, llença un missatge alertant que no es pot modificar per un espai buit
-       echo "El nom no pot ser un espai en blanc o estar buit";
-    } else { // Si el nom es correcte, modifica l'article
-        require_once "../model/modelGeneral.php";
-        modificarArticleModel($nom, $newNom, $descripcio); // Enviar els parametres al model
+    require "../model/modelGeneral.php";
+    if (comprovarUsuariModel($idUsuari,$nom)) {
+        if (empty($newNom)) { // Si el nom nou es vol modificar a un espai o buit, llença un missatge alertant que no es pot modificar per un espai buit
+        echo "El nom no pot ser un espai en blanc o estar buit";
+        } else { // Si el nom es correcte, modifica l'article
+            modificarArticleModel($nom, $newNom, $descripcio); // Enviar els parametres al model
+        }
+    } else {
+        echo "No es pot modificar un article que no és propi";
     }
 
 }
@@ -45,10 +51,16 @@ function mostrarArticle() { // Mostrar l'article de la BDD
 
 function eliminarArticle() { // Elimnar l'article de la BDD
 
+    session_start();
+    $nom = $_POST["nom"]; // Agafar el nom per eliminar el article
+    $idUsuari = $_SESSION['idUsuari'];
 
     require_once "../model/modelGeneral.php";
-    $nom = $_POST["nom"]; // Agafar el nom per eliminar el article
-    eliminarArticleModel($nom); // Enviar els parametres al model
+    if (comprovarUsuariModel($idUsuari,$nom)) {
+        eliminarArticleModel($nom); // Enviar els parametres al model
+    } else {
+        echo "No pots eliminar articles que no siguin propis";
+    }
 
 }
 
