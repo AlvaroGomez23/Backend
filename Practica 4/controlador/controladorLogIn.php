@@ -1,24 +1,16 @@
 <?php
 
 require "../conexio.php";
+session_start();
 
 function iniciarSessio() {
 
-    $email = $_POST["email"];
-    $contrasenya = $_POST["contrasenya"];
+    $email = $_POST["email"]; // Mail que introdueix l'usuari
+    $contrasenya = $_POST["contrasenya"]; // Contrasenya que introdueix l'usuari
 
    
     require "../model/modelUsuaris.php";
-    iniciarSessioModel($email,$contrasenya);
-
-    if (isset($_SESSION['LAST_ACTIVITY'])) {
-        // Comprobar si la última actividad fue hace más de 40 minutos
-        if (time() - $_SESSION['LAST_ACTIVITY'] > 0.5 * 60) {
-            // Si ha pasado el tiempo, destruir la sesión
-            session_unset();     // Liberar todas las variables de sesión
-            session_destroy();   // Destruir la sesión
-        }
-    }
+    iniciarSessioModel($email,$contrasenya); // Crida al login
 
 }
 

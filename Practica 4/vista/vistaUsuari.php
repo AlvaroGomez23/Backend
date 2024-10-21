@@ -20,20 +20,20 @@ if (!isset($_SESSION["email"])) {
 </head>
 <body>
 
-<header>
+<header> <!-- Header que veurà l'usuari una vegada ja logat -->
     <div class="logo">Hola! <?php echo $_SESSION['nom']  ?></div>
     <div class="signin-form">
         <form action="../vista/vistaInserir.php">
-            <input type="submit" value="Inserir Article">
+            <input type="submit" value="Inserir Article"> <!-- Redirecciona a la vista per inserir un article -->
         </form>
     </div>
-    <div class="signin-form">
-        <form action="./vistaPerfil.php">
+    <div class="signin-form"> <!-- Són estils, no redirecciona al signin -->
+        <form action="./vistaPerfil.php"> <!-- Redirecciona a la vista del perfil -->
             <input type="submit" value="Perfil">
         </form>
         <p></p>
         <form action="../controlador/logout.php" method="post">
-            <input type="submit" value="Log Out">
+            <input type="submit" value="Log Out"> <!-- Fa el logout -->
         </form>
 </header>
 
@@ -58,7 +58,7 @@ function vistaMostrarArticlesPersonals($articlesTotals, $articlesPerPagina, $art
             echo '<h2>' . htmlspecialchars($articles[$i]["nom"]) . '</h2>'; // Agafa el titol dels articles i els printa
             echo '<p>' . htmlspecialchars($articles[$i]["descripcio"]) . '</p>'; //  Agafa la descripcio dels articles i els printa
             echo '<p><br></p>';
-            echo '<a href=vistaModificar.php>✏️</a>'.'<a href=vistaEliminar.php>🗑️</a>';
+            echo '<a href=vistaModificar.php>✏️</a>'.'<a href=vistaEliminar.php>🗑️</a>'; // Els botons només redireccionen, no eliminen ni modifiquen l'article
             echo '</div>';
             
         }
