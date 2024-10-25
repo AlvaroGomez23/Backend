@@ -1,3 +1,9 @@
+<?php 
+session_start();
+if (isset($_SESSION['nom'])) {
+    header("Location: ./vistaUsuari.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,10 +34,6 @@
         <form action="../vista/index.php">
             <input type="submit" value="Tornar" class="login-btn">
         </form>
-        <a href="#" class="forgot-password">Contrasenya oblidada?</a>
-        <div class="signup-link">
-            No tens compte? <a href="../vista/vistaSignin.php">Enregistra't</a>
-        </div>
     </div>
 
 </body>

@@ -2,9 +2,8 @@
 //ALVARO GOMEZ
 require "../conexio.php";
 
-
 function inserirArticleModel ($nom, $descripcio) { // Funció per insertar els articles
-    
+    session_start();
     global $conexio; // Variable global que conté la conexió
     $idUsuari = $_SESSION['idUsuari'];
 
