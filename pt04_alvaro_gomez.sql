@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `articles`
 --
+CREATE DATABASE IF NOT EXISTS pt04_alvaro_gomez;
+USE pt04_alvaro_gomez;
 
 CREATE TABLE `articles` (
   `id` int(11) NOT NULL,
