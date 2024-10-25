@@ -20,7 +20,7 @@ function inserirArticle() { // Inserir l'article a la BDD
 
 function modificarArticle() { // Modificar l'article de la BDD
 
-    session_start();
+    
     $nom = $_POST["nom"]; // Agafar el nom actual del article
     $newNom = $_POST["newNom"]; // Agafar el nom que es vol cambiar 
     $descripcio = $_POST["descripcio"]; // Descripció per modificar
@@ -51,7 +51,6 @@ function mostrarArticle() { // Mostrar l'article de la BDD
 
 function eliminarArticle() { // Elimnar l'article de la BDD
 
-    session_start();
     $nom = $_POST["nom"]; // Agafar el nom per eliminar el article
     $idUsuari = $_SESSION['idUsuari'];
 
