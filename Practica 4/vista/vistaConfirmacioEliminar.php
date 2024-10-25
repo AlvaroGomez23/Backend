@@ -1,7 +1,7 @@
 <!-- ALVARO GOMEZ -->
 <?php 
 session_start();
-if (isset($_SESSION['nom'])) {
+if (!isset($_SESSION['nom'])) {
     header("Location: ./vistaUsuari.php");
 }
 ?>
